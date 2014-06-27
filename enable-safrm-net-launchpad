@@ -1,0 +1,50 @@
+#!/bin/sh 
+
+: ${HOST_OS:=unknown}
+
+fail() { printf "\n\033[01;31mERROR: $*\033[00m\n" ; exit 1 ; }
+
+_FindOs() {
+	#Ubuntu
+	if [ $(grep -c Ubuntu /etc/issue 2> /dev/null) ]; theN
+		HOST_OS=ubuntu
+		return;
+	fi
+	#Fedora
+	if [ $(grep -c Fedora /etc/issue 2> /dev/null) ]; then
+		HOST_OS=fedora
+		return;
+	fi
+}
+
+_InstallDeb() {
+	#check root
+	[ `id -u` -eq "0" ] || fail "I cannot continue, you should be root or run it with sudo!"
+
+	#PPA way
+	sudo add-apt-repository ppa:miroslav-safr-4/safrm.net || fail "failed to add ppa repo"
+	#MANUAL
+		#first key
+#		gpg --keyserver pgpkeys.mit.edu --recv-key  1EE8DFC83C1F3923CF48B24BF545AD2CEA4BFEC2 || fail "failed to recieve repo key"
+#		gpg -a --export EA4BFEC2 | sudo apt-key add - || fail "failed to import repo key"
+		#add repo
+#		REPO_FILE=/etc/apt/sources.list.d/safrm_net_launchpad.list
+#		[ ! -e $REPO_FILE ] && ( wget -N http://safrm.net/repo/deb/safrm_net_launchpad.list -O $REPO_FILE || fail "failed to download repo file" )
+	#update index
+	sudo apt-get update
+}
+
+
+_FindOs
+echo "HOST_OS=$HOST_OS"
+
+case $HOST_OS in
+  ubuntu)  _InstallDeb ;;
+  unknown|*)
+	 fail "Unknown system: $HOST_OS"
+esac
+
+
+
+
+
