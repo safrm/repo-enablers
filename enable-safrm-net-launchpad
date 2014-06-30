@@ -29,7 +29,7 @@ _InstallDeb() {
 #		gpg -a --export EA4BFEC2 | sudo apt-key add - || fail "failed to import repo key"
 		#add repo
 #		REPO_FILE=/etc/apt/sources.list.d/safrm_net_launchpad.list
-#		[ ! -e $REPO_FILE ] && ( wget -N http://safrm.net/repo/deb/safrm_net_launchpad.list -O $REPO_FILE || fail "failed to download repo file" )
+#		[ ! -e $REPO_FILE ] && ( wget -N http://safrm.net/repo/safrm_net_launchpad.list -O $REPO_FILE || fail "failed to download repo file" )
 	#update index
 	sudo apt-get update
 }
