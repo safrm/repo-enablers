@@ -10,11 +10,13 @@ Usage:
 
 wget -N  http://safrm.net/repo/enable-safrm-net && sudo sh enable-safrm-net
 or 
-wget -N http://safrm.net/repo/enable-safrm-net -O - | sudo sh 
+wget -N http://safrm.net/repo/enable-safrm-net -O - | sudo sh -i
 
 
 for Launchpad PPA:
 wget -N http://safrm.net/repo/enable-safrm-net-launchpad && sudo sh enable-safrm-net-launchpad
+or
+wget -N http://safrm.net/repo/enable-safrm-net-launchpad -O - | sudo sh -i
 
 
 More info on http://safrm.net/repo/
