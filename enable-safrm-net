@@ -6,22 +6,27 @@ fail() { printf "\n\033[01;31mERROR: $*\033[00m\n" ; exit 1 ; }
 
 _FindOs() {
 	#Ubuntu
-	if [ $(grep -c Ubuntu /etc/issue 2> /dev/null) ]; then
+	if grep -q Ubuntu /etc/issue 2> /dev/null ; then
 		HOST_OS=ubuntu
 		return;
 	fi
 	#Fedora
-	if [ $(grep -c Fedora /etc/issue 2> /dev/null) ]; then
+	if grep -q Fedora /etc/issue 2> /dev/null ; then
 		HOST_OS=fedora
+		return;
+	fi
+	#CentOS
+	if grep -q CentOS /etc/issue 2> /dev/null ; then
+		HOST_OS=centos
 		return;
 	fi
 }
 
 _InstallRpm() {
 	#check root
-	[ `id -u` -eq "0" ] || fail "I cannot continue, you should be root or run it with sudo!"
+	[ `id -u` -eq 0 ] || fail "I cannot continue, you should be root or run it with sudo!"
 	#first key
-	rpm --import http://safrm.net/repo/rpm/safrmnet.key  || fail "failed to add repo key"
+	rpm --import http://safrm.net/repo/rpm/safrmnet.key || fail "failed to add repo key"
 	#add repo
 	REPO_FILE=/etc/yum.repos.d/safrm_net.repo
 	[ ! -e $REPO_FILE ] && ( wget -N http://safrm.net/repo/safrm_net.repo -O $REPO_FILE || fail "failed to download repo file" )
@@ -29,7 +34,7 @@ _InstallRpm() {
 
 _InstallDeb() {
 	#check root
-	[ `id -u` -eq "0" ] || fail "I cannot continue, you should be root or run it with sudo!"
+	[ `id -u` -eq 0 ] || fail "I cannot continue, you should be root or run it with sudo!"
 	#first key
 	wget -N -O - http://safrm.net/releases/safrmnet.key | sudo apt-key add - || fail "failed to add repo key"
 	#add repo
@@ -44,9 +49,9 @@ _FindOs
 echo "HOST_OS=$HOST_OS"
 
 case $HOST_OS in
-  fedora)  _InstallRpm ;;
+  fedora|centos)  _InstallRpm ;;
   ubuntu)  _InstallDeb ;;
-  unknown|*) 
+  unknown|*)
 	 fail "Unknown system: $HOST_OS"
 esac
 

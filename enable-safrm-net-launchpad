@@ -6,20 +6,25 @@ fail() { printf "\n\033[01;31mERROR: $*\033[00m\n" ; exit 1 ; }
 
 _FindOs() {
 	#Ubuntu
-	if [ $(grep -c Ubuntu /etc/issue 2> /dev/null) ]; then
+	if grep -q Ubuntu /etc/issue 2> /dev/null ; then
 		HOST_OS=ubuntu
 		return;
 	fi
 	#Fedora
-	if [ $(grep -c Fedora /etc/issue 2> /dev/null) ]; then
+	if grep -q Fedora /etc/issue 2> /dev/null ; then
 		HOST_OS=fedora
+		return;
+	fi
+	#CentOS
+	if grep -q CentOS /etc/issue 2> /dev/null ; then
+		HOST_OS=centos
 		return;
 	fi
 }
 
 _InstallDeb() {
 	#check root
-	[ `id -u` -eq "0" ] || fail "I cannot continue, you should be root or run it with sudo!"
+	[ `id -u` -eq 0 ] || fail "I cannot continue, you should be root or run it with sudo!"
 
 	#PPA way
 	sudo add-apt-repository ppa:miroslav-safr-4/safrm.net || fail "failed to add ppa repo"
