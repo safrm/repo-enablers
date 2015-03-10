@@ -25,11 +25,17 @@ _FindOs() {
 _InstallRpm() {
 	#check root
 	[ `id -u` -eq 0 ] || fail "I cannot continue, you should be root or run it with sudo!"
+
 	#first key
 	rpm --import http://safrm.net/repo/rpm/safrmnet.key || fail "failed to add repo key"
 	#add repo
 	REPO_FILE=/etc/yum.repos.d/safrm_net.repo
-	[ ! -e $REPO_FILE ] && ( wget -N http://safrm.net/repo/safrm_net.repo -O $REPO_FILE || fail "failed to download repo file" )
+	if [ ! -e $REPO_FILE ]; then
+		 wget -N http://safrm.net/repo/safrm_net.repo -O $REPO_FILE || fail "failed to download repo file" 
+	fi
+
+	#enable EPEL
+	yum install epel-release -y || fail "to enable EPEL"
 }
 
 _InstallDeb() {
@@ -39,7 +45,10 @@ _InstallDeb() {
 	wget -N -O - http://safrm.net/releases/safrmnet.key | sudo apt-key add - || fail "failed to add repo key"
 	#add repo
 	REPO_FILE=/etc/apt/sources.list.d/safrm_net.list
-	[ ! -e $REPO_FILE ] && ( wget -N http://safrm.net/repo/safrm_net.list -O $REPO_FILE || fail "failed to download repo file" )
+	if [ ! -e $REPO_FILE ]; then
+		wget -N http://safrm.net/repo/safrm_net.list -O $REPO_FILE || fail "failed to download repo file" 
+	fi
+
 	#update index
 	sudo apt-get update
 }
