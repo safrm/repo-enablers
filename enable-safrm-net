@@ -42,7 +42,7 @@ _InstallDeb() {
 	#check root
 	[ `id -u` -eq 0 ] || fail "I cannot continue, you should be root or run it with sudo!"
 	#first key
-	wget -N -O - http://safrm.net/releases/safrmnet.key | sudo apt-key add - || fail "failed to add repo key"
+	wget -N -O - http://safrm.net/repo/deb/safrmnet.key | sudo apt-key add - || fail "failed to add repo key"
 	#add repo
 	REPO_FILE=/etc/apt/sources.list.d/safrm_net.list
 	if [ ! -e $REPO_FILE ]; then
