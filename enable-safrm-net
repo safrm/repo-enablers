@@ -31,7 +31,7 @@ _InstallRpm() {
 	#add repo
 	REPO_FILE=/etc/yum.repos.d/safrm_net.repo
 	if [ ! -e $REPO_FILE ]; then
-		 wget -N http://safrm.net/repo/safrm_net.repo -O $REPO_FILE || fail "failed to download repo file" 
+		 wget -N http://safrm.net/repo/rpm/safrm_net.repo -O $REPO_FILE || fail "failed to download repo file" 
 	fi
 
 	#enable EPEL
@@ -46,7 +46,7 @@ _InstallDeb() {
 	#add repo
 	REPO_FILE=/etc/apt/sources.list.d/safrm_net.list
 	if [ ! -e $REPO_FILE ]; then
-		wget -N http://safrm.net/repo/safrm_net.list -O $REPO_FILE || fail "failed to download repo file" 
+		wget -N http://safrm.net/repo/deb/safrm_net.list -O $REPO_FILE || fail "failed to download repo file" 
 	fi
 
 	#update index
